@@ -21,42 +21,128 @@
     <p class="lead">A simple calendar app for scheduling your work day</p>
     <p id="currentDay" class="lead"></p>
   </header>
-  <div class="container"></div>
-  <!-- Timeblocks go here -->
+  <div class="container">
+    <!--This is the html code that I made for testing before making the jquery-->
+    <!-- hourdiv -->
+    <!-- <div class="row time-block"> -->
+    <!-- timeDiv -->
+    <!-- <div class="hour col-sm-1"> -->
+    <!-- 9am -->
+    <!-- </div> -->
+    <!--textArea-->
+    <!-- <textarea class="col-sm-10 userEntry future textarea"></textarea> -->
+    <!-- <button class="saveBtn col-sm-1"></button> -->
+    <!-- </div> -->
+
+    <!-- </div> -->
+    <!-- Timeblocks go here -->
 
 
 
 
-  <script src="./moment.js"></script>
+    <script src="./moment.js"></script>
 
-  <script>
-    //creating a variable to call on moment api
-    var m = moment();
-    //console.log(m);
-    //assigning a var for the current time which should display month date day of week year hour minute and second
-    var currentTime = m.format('LLLL');
-    //creating a var for div with id of currentDay
-    var currentDay = $('#currentDay');
-    //apprnding currentTime to currentDay div
-    currentDay.append(currentTime);
+    <script>
+      //creating a variable to call on moment api
+      var m = moment();
+      //console.log(m);
+      //assigning a var for the current time which should display month date day of week year hour minute and second
+      var currentTime = m.format('LLLL');
+      //creating a var for div with id of currentDay
+      var currentDay = $('#currentDay');
+      //apprnding currentTime to currentDay div
+      currentDay.append(currentTime);
 
-    var hours = ['9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm'];
+      //setting the var hours to objects to be able to access the military time and the am/pm time
+      var hours = [
+        { time: 9, timeString: '9 am' },
+        { time: 10, timeString: '10 am' },
+        { time: 11, timeString: '11 am' },
+        { time: 12, timeString: '12 pm' },
+        { time: 13, timeString: '1 pm' },
+        { time: 14, timeString: '2 pm' },
+        { time: 15, timeString: '3 pm' },
+        { time: 16, timeString: '4 pm' },
+        { time: 17, timeString: '5 pm' }
+      ];
+      //Looping through hours array
+      for (var i = 0; i < hours.length; i++) {
+        var hour = hours[i];
+        // hour is : {time: 9, time_string: '9 am'} 
+        //this block of code is creating a div containing the hour shown in timestring, the text area, and the submit button.
+        var hourDiv = $('<div>');
+        hourDiv.attr('class', 'row time-block');
+        timeDiv = $('<div>');
+        timeDiv.text(hour.timeString);
+        timeDiv.attr('class', 'hour col-sm-1');
+        hourDiv.append(timeDiv);
+        var textArea = $('<textarea>');
+        textArea.attr('class', 'userEntry col-sm-10 textarea future');
+        hourDiv.append(textArea);
+        var saveButton = $('<button>');
+        saveButton.text('Save')
+        saveButton.attr('class', 'saveBtn col-sm-1');
+        hourDiv.append(saveButton);
+        container = $('.container');
+        container.append(hourDiv);
 
-    for (var i = 0; i < hours.length; i++) {
-      var hour = hours[i];
-      var hourDiv = $('<div>');
-      hourDiv.attr('class', 'hour row');
-      var p = hourDiv.append('<p>');
-      p.text(hour);
-      container = $('.container');
-      container.append(hourDiv);
-      console.log(hour);
+
+        //getting the text entered by the user from local storage
+        if (window.localStorage !== "") {
+          var savedContent = window.localStorage.getItem(hour.timeString);
+          (textArea).text(savedContent);
+        };
+
+
+
+        saveButton.on('click', { param1: hour.timeString, param2: textArea }, function (event) {
+
+          //if button is clicked then:
+          //check which button was clicked(what time)
+          var savedHour = event.data.param1;
+          var textContent = event.data.param2.val();
+          //store the input into local storage
+          window.localStorage.setItem(savedHour, textContent);
+          console.log(' my input : ', window.localStorage.getItem(savedHour));
+
+          // if there is previous input for text area, use that when building my calendar
+
+          //allow user to save multiple events
+
+        });
+        // get current hour
+        // console.log('current hour is ', m);
+        var now = moment();
+        var time = now.hour(); // number from 1 - 24
+
+
+
+        // compare current hour with hour of row
+        if (hour.time === time) {
+
+          textArea.attr('class', 'userEntry col-sm-10 textarea present');
+        }
+        else if (hour.time > time) {
+          textArea.attr('class', 'userEntry col-sm-10 textarea future');
+        }
+        else if (hour.time < time) {
+          textArea.attr('class', 'userEntry col-sm-10 textarea past');
+        }
+        // 
+        // if the hour has passed, grey it out
+
+
+        //if it is the current hour, red background
+
+        //if the hour is in the future, make it green
 
 
 
 
 
-    };
+
+
+      };
 
 
 
@@ -69,7 +155,7 @@
 
 
 
-  </script>
+    </script>
 
 
 </body>
