@@ -1,4 +1,7 @@
 # jfdayplanner
+
+To see a working version, click here: https://jerryforsberg.github.io/jfdayplanner/
+
     Index.html:
        
        - lines 25 to 38 is the code that was made for testing before making the jquery.
